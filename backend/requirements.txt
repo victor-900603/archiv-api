@@ -1,0 +1,19 @@
+# FastAPI
+fastapi
+uvicorn
+starlette
+
+# Database
+sqlalchemy
+
+# Langchain
+langchain
+langchain-community
+langchain-text-splitters
+langchain-chroma
+
+# LLM Providers
+langchain-groq
+
+# Embeddings
+sentence-transformers
