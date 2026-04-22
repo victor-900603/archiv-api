@@ -13,14 +13,22 @@ class BaseVectorStore(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def similarity_search(
+    def vector_query(
         self,
         query_embedding: list[float],
-        top_k: int,
+        top_k: int = 5,
         metadata_filter: dict | None = None,
-        include_scores: bool = False,
     ) -> list[dict]:
-        """Perform similarity search and return metadata-rich retrieval results."""
+        """
+        return:
+        [
+            {
+                "text": str,
+                "metadata": dict,
+                "distance": float
+            }
+        ]
+        """
         raise NotImplementedError
 
     @abstractmethod

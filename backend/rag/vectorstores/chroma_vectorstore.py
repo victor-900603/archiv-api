@@ -1,5 +1,5 @@
 from uuid import uuid4
-import chromadb
+from langchain_chroma import Chroma
 
 from .base import BaseVectorStore
 
@@ -11,14 +11,9 @@ class ChromaVectorStore(BaseVectorStore):
         persist_directory: str | None = None,
     ):
         self.persist_directory = persist_directory
-
-        if persist_directory:
-            self.client = chromadb.PersistentClient(path=persist_directory)
-        else:
-            self.client = chromadb.Client()
-
-        self.collection = self.client.get_or_create_collection(
-            name=collection_name
+        self.vectorstore = Chroma(
+            collection_name=collection_name,
+            persist_directory=persist_directory,
         )
 
     def add_documents(
@@ -39,7 +34,7 @@ class ChromaVectorStore(BaseVectorStore):
 
         ids = ids or [str(uuid4()) for _ in documents]
 
-        self.collection.upsert(
+        self.vectorstore._collection.upsert(
             ids=ids,
             documents=documents,
             embeddings=embeddings,
@@ -48,18 +43,13 @@ class ChromaVectorStore(BaseVectorStore):
 
         self.persist()
 
-    def similarity_search(
+    def vector_query(
         self,
         query_embedding: list[float],
-        top_k: int = 5,
+        top_k: int = 10,
         metadata_filter: dict | None = None,
-        include_scores: bool = False,
     ) -> list[dict]:
-        """
-        retrieval layer
-        """
-
-        results = self.collection.query(
+        results = self.vectorstore._collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
             where=metadata_filter,
@@ -73,17 +63,14 @@ class ChromaVectorStore(BaseVectorStore):
         if not documents:
             return []
 
-        rows = []
-        for (doc, metadata, distance) in zip(documents, metadatas, distances):
-            row = {
-                "text": doc,
-                "metadata": metadata,
+        return [
+            {
+                "document": doc,
+                "metadata": meta,
+                "distance": dist,
             }
-            if include_scores:
-                row["score"] = 1 - distance
-            rows.append(row)
-
-        return rows
+            for doc, meta, dist in zip(documents, metadatas, distances)
+        ]
 
     def persist(self):
         if self.persist_directory:
