@@ -13,14 +13,14 @@ class VectorRetriever(BaseRetriever):
 
         query_vec = self.embedder.embed_query(query)
 
-        docs = self.vectorstore.query(
+        docs = self.vectorstore.vector_query(
             query_embedding=query_vec,
             top_k=k
         )
 
         return [
             {
-                "text": d["text"],
+                "document": d["document"],
                 "metadata": d["metadata"],
                 "score": 1 - d["distance"],
                 "source": "vector"

@@ -14,7 +14,7 @@ class BM25Retriever(BaseRetriever):
 
         return [
             {
-                "text": d.page_content,
+                "document": d.page_content,
                 "metadata": d.metadata,
                 "score": 1.0,
                 "source": "bm25"

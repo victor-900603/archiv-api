@@ -55,10 +55,10 @@ class HybridRetriever(BaseRetriever):
 
         # vector
         for d in v_docs:
-            key = d["text"]
+            key = d["document"]
 
             combined[key] = {
-                "text": d["text"],
+                "document": d["document"],
                 "metadata": d["metadata"],
                 "score": d["score"] * self.weight_vector,
                 "source": {"vector"}
@@ -66,11 +66,11 @@ class HybridRetriever(BaseRetriever):
 
         # bm25
         for d in b_docs:
-            key = d["text"]
+            key = d["document"]
 
             if key not in combined:
                 combined[key] = {
-                    "text": d["text"],
+                    "document": d["document"],
                     "metadata": d["metadata"],
                     "score": 0.0,
                     "source": set()

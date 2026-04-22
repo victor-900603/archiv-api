@@ -12,7 +12,7 @@ class CrossEncoderReranker:
         if not docs:
             return []
 
-        pairs = [(query, d["text"]) for d in docs]
+        pairs = [(query, d["document"]) for d in docs]
 
         scores = self.model.predict(pairs)
 

@@ -23,7 +23,7 @@ class BaseVectorStore(ABC):
         return:
         [
             {
-                "text": str,
+                "document": str,
                 "metadata": dict,
                 "distance": float
             }
