@@ -1,3 +1,4 @@
+from uuid import uuid4
 from .base import BaseLoader
 from langchain_community.document_loaders import TextLoader as LCTextLoader
 from langchain_core.documents import Document
@@ -9,8 +10,11 @@ class TextLoader(BaseLoader):
     def load(self) -> list[Document]:
         documents = LCTextLoader(self.file_path).load()
         
+        doc_id = str(uuid4())
+        
         for doc in documents:
             doc.metadata = {
+                "doc_id": doc_id,
                 "type": "text",
                 "file_path": self.file_path,
                 "source": doc.metadata.get("source", self.file_path),
