@@ -1,11 +1,12 @@
 from .base import BaseLoader
 from langchain_community.document_loaders import TextLoader as LCTextLoader
+from langchain_core.documents import Document
 
 class TextLoader(BaseLoader):
     def __init__(self, file_path):
         self.file_path = file_path
 
-    def load(self):
+    def load(self) -> list[Document]:
         documents = LCTextLoader(self.file_path).load()
         
         for doc in documents:
