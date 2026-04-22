@@ -21,3 +21,4 @@ sentence-transformers
 
 # Other
 pypdf
+rank_bm25
