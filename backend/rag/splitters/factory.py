@@ -1,5 +1,6 @@
 from .recursive_splitter import RecursiveSplitter
 from .sentence_splitter import SentenceSplitter
+from .base import BaseSplitter
 from pathlib import Path
 
 class SplitterFactory:
@@ -8,13 +9,12 @@ class SplitterFactory:
         ".txt": RecursiveSplitter,
     }
     @staticmethod
-    def get(file_path: str, document_type: str = None, **kwargs):
+    def get(file_path: str, document_type: str = None, **kwargs) -> BaseSplitter:
         if document_type:
-            splitter_class = SplitterFactory._registry.get(document_type)
+            extension = f".{document_type}"
         else:
             extension = Path(file_path).suffix.lower()
-            splitter_class = SplitterFactory._registry.get(extension)
-            
+        splitter_class = SplitterFactory._registry.get(extension)
         if not splitter_class:
-            raise ValueError(f"No splitter found for document type: {document_type}")
+            raise ValueError(f"No splitter found for extension: {extension}")
         return splitter_class(**kwargs)
