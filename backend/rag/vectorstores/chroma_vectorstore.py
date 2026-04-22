@@ -54,7 +54,7 @@ class ChromaVectorStore(BaseVectorStore):
         top_k: int = 5,
         metadata_filter: dict | None = None,
         include_scores: bool = False,
-    ):
+    ) -> list[dict]:
         """
         retrieval layer
         """
@@ -73,17 +73,17 @@ class ChromaVectorStore(BaseVectorStore):
         if not documents:
             return []
 
-        if not include_scores:
-            return documents
-
-        return [
-            {
+        rows = []
+        for (doc, metadata, distance) in zip(documents, metadatas, distances):
+            row = {
                 "text": doc,
-                "metadata": meta,
-                "score": 1 - dist,
+                "metadata": metadata,
             }
-            for doc, meta, dist in zip(documents, metadatas, distances)
-        ]
+            if include_scores:
+                row["score"] = 1 - distance
+            rows.append(row)
+
+        return rows
 
     def persist(self):
         if self.persist_directory:

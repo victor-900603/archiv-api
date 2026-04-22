@@ -7,8 +7,9 @@ class BaseVectorStore(ABC):
         documents: list[str],
         embeddings: list[list[float]],
         metadatas: list[dict] | None = None,
+        ids: list[str] | None = None,
     ):
-        """Add documents, embeddings, and optional metadata to the vector store."""
+        """Add documents, embeddings, metadata, and optional ids to the vector store."""
         raise NotImplementedError
     
     @abstractmethod
@@ -17,8 +18,9 @@ class BaseVectorStore(ABC):
         query_embedding: list[float],
         top_k: int,
         metadata_filter: dict | None = None,
-    ) -> list[str]:
-        """Perform similarity search with optional metadata filtering."""
+        include_scores: bool = False,
+    ) -> list[dict]:
+        """Perform similarity search and return metadata-rich retrieval results."""
         raise NotImplementedError
 
     @abstractmethod
