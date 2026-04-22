@@ -8,7 +8,7 @@ class ChromaVectorStore(BaseVectorStore):
     def __init__(
         self,
         collection_name: str = "documents",
-        persist_directory: str | None = None,
+        persist_directory: str | None = "./chroma_db",
     ):
         self.persist_directory = persist_directory
         self.vectorstore = Chroma(
