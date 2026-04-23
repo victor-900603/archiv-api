@@ -48,7 +48,7 @@ class RAGPipeline:
 
 
 if __name__ == "__main__":
-    from ...configs.logging import configure_logging
+    from configs.logging import configure_logging
     from ..retrieval import *
     from ..vectorstores.factory import VectorStoreFactory
     from ..embeddings.factory import EmbeddingFactory

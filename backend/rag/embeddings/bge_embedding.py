@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer
-from ...configs.settings import settings
+from configs.settings import settings
 from .base import BaseEmbedding
 
 class BGEEmbedding(BaseEmbedding):

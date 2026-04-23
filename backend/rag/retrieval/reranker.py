@@ -1,5 +1,5 @@
 from sentence_transformers import CrossEncoder
-from ...configs.settings import settings
+from configs.settings import settings
 class BaseReranker:
     def rerank(self, query: str, docs: list, top_k: int = None):
         raise NotImplementedError("Reranker must implement rerank method")

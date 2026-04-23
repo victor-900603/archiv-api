@@ -22,6 +22,7 @@ def configure_logging(log_level: str | None = None) -> None:
         format=DEFAULT_LOG_FORMAT,
     )
     
+    logging.getLogger("filelock").setLevel(logging.WARNING)
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("chromadb").setLevel(logging.WARNING)
     logging.getLogger("groq").setLevel(logging.WARNING)

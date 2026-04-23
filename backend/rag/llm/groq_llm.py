@@ -1,5 +1,5 @@
 from .base import BaseLLM
-from ...configs.settings import settings
+from configs.settings import settings
 from langchain_groq import ChatGroq
 
 class GroqLLM(BaseLLM):
