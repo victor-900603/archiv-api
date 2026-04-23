@@ -62,7 +62,7 @@ if __name__ == "__main__":
     from ..vectorstores.factory import VectorStoreFactory
 
     pipeline = IngestionPipeline(
-        embedder=EmbeddingFactory.get("hf"),
+        embedder=EmbeddingFactory.get("bge"),
         vectorstore=VectorStoreFactory.get("chroma"),
     )
     result = pipeline.ingest(r"backend\docs\example\example.pdf")
