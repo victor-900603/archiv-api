@@ -41,6 +41,14 @@ class BaseVectorStore(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def delete_documents(
+        self,
+        metadata_filter: dict | None = None,
+    ):
+        """Delete stored documents, optionally filtered by metadata."""
+        raise NotImplementedError
+
+    @abstractmethod
     def persist(self):
         """Persist vector store data if the backend supports explicit flush."""
         raise NotImplementedError

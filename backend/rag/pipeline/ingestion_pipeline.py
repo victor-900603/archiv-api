@@ -1,13 +1,14 @@
-from typing import Any
 from uuid import uuid4
 from ..loaders.factory import LoaderFactory
 from ..splitters.factory import SplitterFactory
+from ..embeddings import BaseEmbedding
+from ..vectorstores import BaseVectorStore
 
 class IngestionPipeline:
     def __init__(
         self,
-        embedder: Any,
-        vectorstore: Any,
+        embedder: BaseEmbedding,
+        vectorstore: BaseVectorStore,
     ):
         self.embedder = embedder
         self.vectorstore = vectorstore
@@ -15,6 +16,10 @@ class IngestionPipeline:
     def ingest(self, file_path: str) -> dict:
         loader = LoaderFactory.get(file_path)
         documents = loader.load()
+
+        self.vectorstore.delete_documents(
+            metadata_filter={"file_path": file_path}
+        )
 
         if not documents:
             return {
@@ -58,7 +63,7 @@ class IngestionPipeline:
 
 
 if __name__ == "__main__":
-    from ...configs.logging import configure_logging
+    from configs.logging import configure_logging
     from ..embeddings.factory import EmbeddingFactory
     from ..vectorstores.factory import VectorStoreFactory
 

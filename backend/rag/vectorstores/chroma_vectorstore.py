@@ -98,6 +98,13 @@ class ChromaVectorStore(BaseVectorStore):
             for doc, meta in zip(documents, metadatas)
         ]
 
+    def delete_documents(
+        self,
+        metadata_filter: dict | None = None,
+    ):
+        self.vectorstore._collection.delete(where=metadata_filter)
+        self.persist()
+
     def persist(self):
         if self.persist_directory:
             pass
