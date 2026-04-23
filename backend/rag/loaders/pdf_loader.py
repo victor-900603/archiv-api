@@ -13,6 +13,8 @@ class PDFLoader(BaseLoader):
         doc_id = str(uuid4())
         
         for doc in documents:
+            doc.page_content = self._clean_text(doc.page_content)
+            
             doc.metadata = {
                 "doc_id": doc_id,
                 "type": "pdf",
