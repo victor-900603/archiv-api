@@ -13,7 +13,7 @@ from ..llm import GroqLLM
 from .rag_pipeline import RAGPipeline
 from .ingestion_pipeline import IngestionPipeline
 
-def build_rag_pipeline(config: dict) -> RAGPipeline:
+def build_rag_pipeline(config: dict = {}) -> RAGPipeline:
     llm = GroqLLM()
 
     vectorstore = VectorStoreFactory.get(config.get("vectorstore", "chroma"))
@@ -54,7 +54,7 @@ def build_rag_pipeline(config: dict) -> RAGPipeline:
 
     return rag_pipeline
 
-def build_ingestion_pipeline(config: dict) -> IngestionPipeline:
+def build_ingestion_pipeline(config: dict = {}) -> IngestionPipeline:
     ingestion_pipeline = IngestionPipeline(
         embedder=EmbeddingFactory.get(config.get("embedding", "bge")),
         vectorstore=VectorStoreFactory.get(config.get("vectorstore", "chroma")),
