@@ -1,7 +1,7 @@
-from langchain_core.language_models import BaseChatModel
+from ..llm.base import BaseLLM
 
 class QueryRewriter:
-    def __init__(self, llm: BaseChatModel, n_queries: int = 4):
+    def __init__(self, llm: BaseLLM, n_queries: int = 4):
         self.llm = llm
         self.n_queries = n_queries
 
@@ -14,11 +14,11 @@ class QueryRewriter:
 {query}
 """
 
-        response = self.llm.invoke(prompt)
+        response = self.llm.generate(prompt)
 
         queries = [
             q.strip("- ").strip()
-            for q in response.content.split("\n")
+            for q in response.split("\n")
             if q.strip()
         ]
 
