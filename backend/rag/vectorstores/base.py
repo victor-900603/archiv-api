@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from langchain_core.documents import Document
 
 class BaseVectorStore(ABC):
     @abstractmethod
@@ -29,6 +30,14 @@ class BaseVectorStore(ABC):
             }
         ]
         """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_all_documents(
+        self,
+        metadata_filter: dict | None = None,
+    ) -> list[Document]:
+        """Return all stored documents, optionally filtered by metadata."""
         raise NotImplementedError
 
     @abstractmethod

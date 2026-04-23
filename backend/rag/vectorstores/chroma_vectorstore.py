@@ -1,5 +1,6 @@
 from uuid import uuid4
 from langchain_chroma import Chroma
+from langchain_core.documents import Document
 
 from .base import BaseVectorStore
 
@@ -72,6 +73,46 @@ class ChromaVectorStore(BaseVectorStore):
             for doc, meta, dist in zip(documents, metadatas, distances)
         ]
 
+    def get_all_documents(
+        self,
+        metadata_filter: dict | None = None,
+    ) -> list[Document]:
+        results = self.vectorstore._collection.get(
+            where=metadata_filter,
+            include=["documents", "metadatas"],
+        )
+
+        documents = results.get("documents", [])
+        metadatas = results.get("metadatas", [])
+
+        if not documents:
+            return []
+
+        return [
+            Document(
+                page_content=doc,
+                metadata={
+                    **(meta or {}),
+                },
+            )
+            for doc, meta in zip(documents, metadatas)
+        ]
+
     def persist(self):
         if self.persist_directory:
             pass
+        
+if __name__ == "__main__":
+    vectorstore = ChromaVectorStore(collection_name="test_collection")
+    vectorstore.add_documents(
+        documents=["Hello world", "Hi there"],
+        embeddings=[[0.1, 0.2], [0.3, 0.4]],
+        metadatas=[{"source": "greeting"}, {"source": "salutation"}],
+    )
+
+    query_embedding = [0.1, 0.2]
+    results = vectorstore.vector_query(query_embedding=query_embedding, top_k=2)
+    print(results)
+
+    all_docs = vectorstore.get_all_documents()
+    print(all_docs)
