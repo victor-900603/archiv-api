@@ -7,10 +7,10 @@ from time import perf_counter
 logger = logging.getLogger('retrieval')
 
 class VectorRetriever(BaseRetriever):
-    def __init__(self, vectorstore: BaseVectorStore, embedder: BaseEmbedding, k=10):
+    def __init__(self, vectorstore: BaseVectorStore, embedder: BaseEmbedding, default_k=10):
         self.vectorstore = vectorstore
         self.embedder = embedder
-        self.default_k = k
+        self.default_k = default_k
 
     def retrieve(self, query: str, k: int = None, **kwargs):
         t0 = perf_counter()

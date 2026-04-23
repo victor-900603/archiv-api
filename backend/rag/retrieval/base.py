@@ -7,7 +7,7 @@ class BaseRetriever(ABC):
     def retrieve(
         self,
         query: str,
-        k: int = 5,
+        default_k: int = 5,
         **kwargs
     ) -> List[Dict[str, Any]]:
         """

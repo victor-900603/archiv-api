@@ -11,13 +11,13 @@ class HybridRetriever(BaseRetriever):
         bm25_retriever: BaseRetriever,
         weight_vector: float = 0.5,
         weight_bm25: float = 0.5,
-        k: int = 10
+        default_k: int = 10
     ):
         self.vector = vector_retriever
         self.bm25 = bm25_retriever
         self.weight_vector = weight_vector
         self.weight_bm25 = weight_bm25
-        self.default_k = k
+        self.default_k = default_k
 
     def retrieve(self, query: str, k: int = None, **kwargs):
         t0 = perf_counter()
