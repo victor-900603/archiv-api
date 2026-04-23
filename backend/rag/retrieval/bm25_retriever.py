@@ -30,6 +30,11 @@ class BM25Retriever(BaseRetriever):
 
             documents = self.vectorstore.get_all_documents()
 
+        if not documents:
+            logger.info("[BM25] No documents available; skipping BM25 index build.")
+            self.retriever = None
+            return self
+
         self.retriever = LCBM25Retriever.from_documents(documents)
         return self
 
@@ -40,7 +45,15 @@ class BM25Retriever(BaseRetriever):
         k = k or self.default_k
 
         if self.retriever is None:
+            if self.vectorstore is None:
+                logger.debug("[BM25] No vectorstore or retriever available; returning empty result set.")
+                return []
+
             self.refresh()
+
+        if self.retriever is None:
+            logger.debug("[BM25] No retriever available; returning empty result set.")
+            return []
         
         docs = self.retriever.invoke(query)
         
