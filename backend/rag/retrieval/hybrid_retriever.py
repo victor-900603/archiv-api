@@ -1,5 +1,8 @@
 from .base import BaseRetriever
+from time import perf_counter
+import logging
 
+logger = logging.getLogger('retrieval')
 
 class HybridRetriever(BaseRetriever):
     def __init__(
@@ -17,6 +20,9 @@ class HybridRetriever(BaseRetriever):
         self.default_k = k
 
     def retrieve(self, query: str, k: int = None, **kwargs):
+        t0 = perf_counter()
+        logger.debug(f"[Hybrid] Retrieving with query: {query}, k: {k}")
+        
         k = k or self.default_k
 
         v_docs = self.vector.retrieve(query, k=k)
@@ -28,7 +34,10 @@ class HybridRetriever(BaseRetriever):
         fused = self._fusion(v_docs, b_docs)
 
         fused.sort(key=lambda x: x["score"], reverse=True)
-
+        
+        t1 = perf_counter()
+        logger.debug(f"[Hybrid] Retrieved {len(fused)} fused documents in {t1 - t0:.2f} seconds.")
+        
         return fused[:k]
     
     def _normalize(self, docs):

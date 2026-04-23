@@ -1,6 +1,10 @@
 from langchain_community.retrievers import BM25Retriever as LCBM25Retriever
 from ..vectorstores.base import BaseVectorStore
 from .base import BaseRetriever
+from time import perf_counter
+import logging
+
+logger = logging.getLogger('retrieval')
 
 
 class BM25Retriever(BaseRetriever):
@@ -30,13 +34,19 @@ class BM25Retriever(BaseRetriever):
         return self
 
     def retrieve(self, query: str, k: int = None, **kwargs):
+        t0 = perf_counter()
+        logger.debug(f"[BM25] Retrieving with query: {query}, k: {k}")
+        
         k = k or self.default_k
 
         if self.retriever is None:
             self.refresh()
         
         docs = self.retriever.invoke(query)
-
+        
+        t1 = perf_counter()
+        logger.debug(f"[BM25] Retrieved {len(docs)} documents in {t1 - t0:.2f} seconds.")
+        
         return [
             {
                 "document": d.page_content,
