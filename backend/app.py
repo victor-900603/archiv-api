@@ -4,6 +4,7 @@ from pathlib import Path
 
 from rag.pipeline import build_rag_pipeline, build_ingestion_pipeline
 from configs.logging import configure_logging
+from routers.rag import router as rag_router
 
 
 
@@ -21,6 +22,7 @@ async def lifespan(app: FastAPI):
     yield
     
 app = FastAPI(lifespan=lifespan)
+app.include_router(rag_router)
 
 
 @app.get("/health")
