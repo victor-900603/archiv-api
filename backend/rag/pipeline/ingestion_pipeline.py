@@ -58,8 +58,11 @@ class IngestionPipeline:
 
 
 if __name__ == "__main__":
+    from ...configs.logging import configure_logging
     from ..embeddings.factory import EmbeddingFactory
     from ..vectorstores.factory import VectorStoreFactory
+
+    configure_logging()
 
     pipeline = IngestionPipeline(
         embedder=EmbeddingFactory.get("bge"),

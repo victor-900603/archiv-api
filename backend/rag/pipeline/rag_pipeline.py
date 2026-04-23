@@ -48,10 +48,13 @@ class RAGPipeline:
 
 
 if __name__ == "__main__":
+    from ...configs.logging import configure_logging
     from ..retrieval import *
     from ..vectorstores.factory import VectorStoreFactory
     from ..embeddings.factory import EmbeddingFactory
     from..llm.groq_llm import GroqLLM
+
+    configure_logging()
     
     llm = GroqLLM()
 
@@ -85,7 +88,7 @@ if __name__ == "__main__":
         llm=llm,
     )
     
-    query = "這篇論文主要在說什麼？"
+    query = "銀行業建立公司治理制度有什麼？"
     response = rag_pipeline.ask(query)
     
     print("Response:", response)
