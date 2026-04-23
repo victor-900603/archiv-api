@@ -1,7 +1,10 @@
 from sentence_transformers import CrossEncoder
 
+class BaseReranker:
+    def rerank(self, query: str, docs: list, top_k: int = None):
+        raise NotImplementedError("Reranker must implement rerank method")
 
-class CrossEncoderReranker:
+class CrossEncoderReranker(BaseReranker):
     def __init__(self, model_name="cross-encoder/ms-marco-MiniLM-L-6-v2", top_k=5):
         self.model = CrossEncoder(model_name)
         self.top_k = top_k
