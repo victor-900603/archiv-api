@@ -1,5 +1,5 @@
 services:
-  api:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
@@ -12,3 +12,18 @@ services:
     environment:
       - PYTHONPATH=/workspace/backend
     command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload --reload-dir .
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: archiv-api-frontend-dev
+    working_dir: /workspace/frontend
+    volumes:
+      - ./:/workspace
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONPATH=/workspace/frontend
+      - API_BASE_URL=http://backend:8000
+    command: streamlit run app.py --server.port 8501 --server.address 0.0.0.0

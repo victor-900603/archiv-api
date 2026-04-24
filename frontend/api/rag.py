@@ -1,10 +1,19 @@
+import os
+
 import requests
 
-API_BASE_URL = "http://localhost:8000"
+
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+
 
 def query_rag(query: str, history: list[dict] | None = None) -> dict:
-    response = requests.post(f"{API_BASE_URL}/rag/ask", json={"query": query, "history": history})
-    if response.status_code == 200:
+    try:
+        response = requests.post(
+            f"{API_BASE_URL}/rag/ask",
+            json={"query": query, "history": history},
+            timeout=30,
+        )
+        response.raise_for_status()
         return response.json()
-    else:
-        raise Exception(f"API Error: {response.status_code} - {response.text}")
+    except requests.exceptions.RequestException as exc:
+        raise Exception(f"Cannot connect to backend API at {API_BASE_URL}: {exc}") from exc
