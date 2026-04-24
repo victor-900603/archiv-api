@@ -9,4 +9,4 @@ class GroqLLM(BaseLLM):
 
     def generate(self, prompt: str) -> str:
         response = self.client.invoke(prompt)
-        return response.text.strip()
+        return response.content.strip()
